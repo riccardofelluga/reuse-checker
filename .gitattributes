@@ -1,0 +1,25 @@
+#
+# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+#                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+#                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+#
+# This file is part of the project reuse-checker which is released under the MIT license.
+# See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+# 
+# SPDX-License-Identifier: MIT
+#
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.ex text
+*.exs text
+
+# Declare files that will always have CRLF line endings on checkout.
+*.sh text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary

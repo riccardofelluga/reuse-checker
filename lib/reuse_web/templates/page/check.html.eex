@@ -1,0 +1,179 @@
+<!--
+Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+                   Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+                   Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+
+This file is part of the project reuse-checker which is released under the MIT license.
+See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+
+SPDX-License-Identifier: MIT
+-->
+
+<section class="">
+  <div class="container">
+  <div class="row justify-content-left pl-3">
+    <h2 id="repository">
+      Evaluation of
+      <%=@repository %>
+    </div>
+    <%= if @tests.does_not_exist == true do %>
+    <div class="row justify-content-left pl-3">
+      <h4>This repository does not exist anymore :( </h4>
+    </div>
+    <% else %>
+    <div class="row justify-content-left align-middle pl-3 mt-3">
+      <%= if @tests.compliant == true do %>
+      <img src="https://reuse.software/badge/reuse-compliant.svg" alt="reuse compliant">
+      <% end %>
+    </h2>
+  </div>
+    <div id="results">
+      <br/>
+      <p>
+        The result of the analysis are below. After the results, we briefly explain how we evaluated the repository.
+      </p>
+      <div class="list-group">
+        <div class="list-group-item list-group-item-action flex-column align-items-start shadow p-3 mb-5 bg-white rounded">
+          <div id="license" class="d-flex w-100 justify-content-between">
+            <h4 class="mb-1">Provide each license used in repository</h4>
+            <h5><%= if @tests.all_licenses_present == true, do: content_tag( :span,"Compliant", class: "badge badge-success"), else: content_tag(:span, "Not compliant", class: "badge badge-danger")%></h5>
+          </div>
+          <%= if @tests.multiple_licenses == true do %>          
+          <ul class="markdown-toc">
+            <li><span class="badge badge-info">FOUND</span>&nbsp;<b>Multiple</b> licenses files have been found in the license folder.</li>          
+            <%= if @tests.all_licenses_present == true do %>
+              <li><b>All</b> files uses this set of licenses<br/></li>
+            <% else %>
+              <li><b>Not all</b> files uses this set of licenses</li>
+            <% end %>
+          </ul>
+          <% else %>
+          <%= if @tests.single_license_file_exists == true do %>            
+          <ul class="markdown-toc">
+            <li><span class="badge badge-info">FOUND</span>&nbsp;A <b>single</b> license file has been found.</li>
+            <%= if @tests.all_licenses_present == true do %>
+              <li><b>All</b> files uses this license<br/></li>
+            <% else %>
+              <li><b>Not all</b> files uses this license</li> 
+            <% end %>
+          </ul>
+          <% else %>
+            <span class="badge badge-secondary">NOT FOUND</span>&nbsp;<b>No licenses</b> have been found in the root directory.
+            <h6>Check your project <span class="badge badge-primary" style="">HINT</span></h6>
+            <ul class="markdown-toc">
+              <li>In case your project uses <b>one</b> license be sure to put it as a file named <code>LICENSE</code>, <code>LICENCE</code>, <code>COPYING</code> or <code>COPYRIGHT</code></li>
+              <li>In case your project uses <b>multiple</b> licenses be sure to put them in a folder named <code>LICENSES</code></li>
+            </ul>
+          <% end %>
+          <% end %>
+          <p>
+            In addition to license information, we also evaluated whether the repository contains a readme file and a file providing the authors of the project:
+          </p>
+          <ul class="markdown-toc">
+          <li><%= if @tests.readme_exists == true do %>
+            <span class="badge badge-info">FOUND</span> Readme file has been found
+          <% else %>
+            <span class="badge badge-secondary">NOT FOUND</span> Readme file has not been found
+          <% end %></li>
+          <li><%= if @tests.authors_file_exists == true do %>
+            <span class="badge badge-info">FOUND</span> Authors file has been found 
+          <% else %>
+            <span class="badge badge-secondary">NOT FOUND</span> Authors file has not been found 
+          <% end %></li>
+          </ul>
+          <small>For more information please read the test cases below</small>
+        </div>
+        <div class="list-group-item list-group-item-action flex-column align-items-start shadow p-3 mb-5 bg-white rounded">
+          <div id="files" class="d-flex w-100 justify-content-between">
+            <h4 class="mb-1">Include copyright and license notices in all files</h4>
+            <h5><%= if @tests.each_file_has_copyright_and_license == true, do: content_tag( :span,"Compliant", class: "badge badge-success"), else: content_tag(:span, "Not compliant", class: "badge badge-danger")%></h5>
+          </div>
+          <ul class="markdown-toc">
+          <li><%= if @tests.each_file_has_copyright_and_license == true do %>
+          <b>All</b> files are associated with a copyright notice and a valid SPDX license identifier.          
+          <% else %>
+          <b>Not all</b> files are associated with a copyright notice and a valid SPDX license identifier.          
+          <% end %></li>
+          <li><%= if @tests.debian_file_found  == true do %>
+            <span class="badge badge-info">FOUND</span> A DEP-5/copyright file <b>has been</b> found and it declares licenses for <b><%=@tests.debian_declared_files_count%> files</b> 
+          <% else %>
+            <span class="badge badge-secondary">NOT FOUND</span> A DEP-5/copyright file <b>has not been</b> found
+          <% end %></li>
+          <li><%= if @tests.spdx_file_found == true do %>
+            <span class="badge badge-info">FOUND</span> A <code>.spdx</code> file <b>has been</b> found and it declares licenses for <b><%=@tests.spdx_declared_files_count%> files</b> 
+          <% else %>
+            <span class="badge badge-secondary">NOT FOUND</span> A <code>.spdx</code> file <b>has not been</b> found
+          <% end %></li>
+          </ul>
+          We analyzed <b><%=@tests.number_of_files%> files</b>, of which:
+            <ul class="markdown-toc">
+              <li><b><%=@tests.copyright_count%> files</b> have a copyright notice</li>
+              <li><b><%=@tests.license_in_file%> files</b> have the license identifier placed in the header of the file itself</li>
+              <li><b><%=@tests.license_in_dot_license%> files</b> have a correspondent <code>.license</code> file</li>
+            </ul>
+         </p>
+         </p>
+         <small>For more information please read the test cases below</small>
+        </div>
+        <div class="list-group-item list-group-item-action flex-column align-items-start shadow p-3 mb-5 bg-white rounded">
+          <div id="inventory" class="d-flex w-100 justify-content-between">
+            <h4 class="mb-1">Provide an inventory for included software</h4>
+            <h5><%= if @tests.inventory_of_software_included_with_all_files == true, do: content_tag( :span,"Best option", class: "badge badge-success"), else: content_tag(:span, "Recommended option", class: "badge badge-warning")%></h5>
+          </div>
+          <p class="mb-1">
+            <ul class="markdown-toc">
+            <li><%= if @tests.spdx_file_found == true do %>
+              <span class="badge badge-info">FOUND</span> A file <code>LICENSE.spdx</code> <b>has been</b> found
+              
+                <li><%= if @tests.inventory_of_software_included_with_all_files == true do %>
+                <span class="badge badge-success">ALL</span>
+                <% else %>
+                <span class="badge badge-danger">NOT ALL</span>
+                <% end %> It declares licenses for <b><%=@tests.spdx_declared_files_count%> files</b>
+                </li>
+
+            <% else %>
+              <span class="badge badge-secondary">NOT FOUND</span> The file <code>LICENSE.spdx</code> <b>has not been</b> found
+              <h6><span class="badge badge-primary" style="">HINT</span> Find out how to generate a file <code>LICENSE.spdx</code> with the reuse tool available on <a href="https://git.fsfe.org/reuse/reuse">https://git.fsfe.org/reuse/reuse</a></h6>
+            <% end %></li>
+            </ul>
+          </p>
+          <small>For more information please read the test cases below</small>
+        </div>
+      </div>
+      <br/>
+      
+      <h3 class="mb-1">Information about the way we evaluate the compliance of a
+      repository</h3> <p>In detail, we perform the following tests to determine
+      if a repository provides all licenses, includes copyright and license
+      information in all files, and provides an inventory for the included
+      software.</p>
+      <%= render ReuseWeb.PageView, "_checks.html", conn: @conn %>
+</div>
+
+</section>
+
+<script type="text/javascript"> 
+  let app = require("js/app");
+
+  app.channel.on_update(function(payload) {
+    switch (payload.command) { 
+      case "end_study":
+        $("#results").css("display", "block");
+        break;
+      case "remove_repository":        
+        $("#repository").css("color", "black");
+        $("#repo_spinner").remove();      
+        break;
+      case "downloaded_repository":        
+        $("#repository").css("color", "green");
+        $("#repo_spinner").css("border-top", "7px solid green");        
+        break;
+      case "remove_repository_triggered":
+        $("#repository").css("color", "red");
+        $("#repo_spinner").css("border-top", "7px solid red");
+        break;
+    }
+  });  
+</script>
+<% end %>

@@ -1,0 +1,47 @@
+<!--
+Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+                   Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+                   Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+
+This file is part of the project reuse-checker which is released under the MIT license.
+See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+
+SPDX-License-Identifier: MIT
+-->
+
+<section class="">
+<div class="container"> 
+<div class="row justify-content-center">
+    <h2 id="repository">
+      Evaluating <%=@repository %>
+    </h2>
+</div>
+<div class="row justify-content-center align-middle">
+    <h5>Please wait, you'll be redirected once the evaluation has ended</h5>
+    <div id="repo_spinner" class="loader-analyzer"></div>
+</div>
+</div>
+</section>
+<script type="text/javascript"> 
+  let app = require("js/app");
+
+  app.channel.on_update(function(payload) {
+    switch (payload.command) { 
+      case "end_study":
+        window.location.href = "<%=page_path(@conn, :check) %>?todo_id=" + payload.todo_id;
+        break;
+      case "remove_repository":        
+        $("#repository").css("color", "black");
+        $("#repo_spinner").remove();      
+        break;
+      case "downloaded_repository":        
+        $("#repository").css("color", "green");
+        $("#repo_spinner").css("border-top", "4px solid green");        
+        break;
+      case "remove_repository_triggered":
+        $("#repository").css("color", "red");
+        $("#repo_spinner").css("border-top", "4px solid red");
+        break;
+    }
+  });  
+</script>

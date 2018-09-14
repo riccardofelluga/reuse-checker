@@ -1,9 +1,47 @@
+#
+# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+#                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+#                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+#
+# This file is part of the project reuse-checker which is released under the MIT license.
+# See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+# 
+# SPDX-License-Identifier: MIT
+#
+
+# App artifacts
 /_build
-/cover
+/db
 /deps
-/doc
+/*.ez
+/cover/
+/doc/
 /.fetch
+
+# Generated on crash by the VM
 erl_crash.dump
-*.ez
-*.beam
+
+# Generated on crash by NPM
+npm-debug.log
+
+# Static artifacts
+/assets/node_modules
+
+# Since we are building assets from assets/,
+# we ignore priv/static. You may want to comment
+# this depending on your deployment strategy.
+/priv/static/
+
+# Files matching config/*.secret.exs pattern contain sensitive
+# data and you should not commit them into version control.
+#
+# Alternatively, you may comment the line below and commit the
+# secrets files as long as you replace their contents by environment
+# variables.
 /config/*.secret.exs
+
+# Other stuff
+/.elixir_ls/
+/config/local.exs
+/repos
+**/.DS_Store

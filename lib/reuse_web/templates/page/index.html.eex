@@ -1,0 +1,143 @@
+<!--
+Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+                   Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+                   Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+
+This file is part of the project reuse-checker which is released under the MIT license.
+See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+
+SPDX-License-Identifier: MIT
+-->
+
+<div id="error" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">        
+        <h4 class="modal-title">Error</h4>
+        <button type="button" class="close" data-dismiss="modal"><img src="<%= static_path(@conn, "/images/x.svg") %>"></button>
+      </div>
+      <div class="modal-body">
+        <p><%= get_flash(@conn, :input_error) %></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+ <header class="masthead text-white text-center">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <h1 class="mb-5">Find out if your Git repository follows best practices to provide license and copyright information!</h1>
+      </div>
+      <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+        <%= form_for @conn, page_path(@conn, :analyzing), [method: :post], fn f -> 
+          content_tag :div, class: "form-row" do [
+            content_tag :div, class: "col-12 col-md-9 mb-2 mb-md-0" do
+              text_input f, :url, class: "form-control form-control-lg", placeholder: "Enter an URL to a Git repository..."
+            end,
+            content_tag :div, class: "col-12 col-md-3" do
+              submit("Check", method: "get", class: "btn btn-block btn-lg btn-primary")
+            end
+          ]
+          end
+        end %>          
+        <%= unless is_nil(get_flash(@conn, :input_error)) do %>
+          <script type="text/javascript">
+            $(document).ready(function () {
+              $("#error").modal();              
+            });
+          </script>
+        <% end %>      
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="features-icons bg-light text-center">
+  <div class="container">
+    <div class="row">      
+      <div class="col-lg-6">
+        <a class="js-scroll-trigger" href="#reuse">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex justify-content-center">
+              <img src="<%= static_path(@conn, "/images/refresh-ccw.svg") %>">
+            </div>
+            <h3>The REUSE Initiative</h3>
+            <p class="lead mb-0">The goals of the initiative and the best practices it recommends.</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <a class="js-scroll-trigger" href="#how">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex justify-content-center">
+              <img src="<%= static_path(@conn, "/images/info.svg") %>">
+            </div>
+            <h3>How it works</h3>
+            <p class="lead mb-0">How we check if your repository follows best practices for license information.</p>
+          </div>
+        </a>
+      </div>      
+    </div>
+  </div>
+</section>
+
+<a name ="reuse"/>  
+<section class="">
+  <div class="container">
+    <h2>
+      The REUSE initiative      
+    </h2>
+    <p>
+      The REUSE initiative is a project of the <a href="https://fsfe.org/">Free
+      Software Foundation Europe</a> and has the goal to define best practices on
+      how to add copyright and license information to a project in ways not only
+      humans can read, but computers as well. 
+    </p>
+    <p>
+      In brief, the best practices are grouped around three guidelines:
+    </p>
+    <ol>
+      <li>Include the exact text of each license used in the project.</li>
+      <li>Include a copyright notice and license in each file.</li>
+      <li>Provide an automatically generated inventory for the included software.</li>
+    </ol>  
+    <p>
+      The detailed practices are described at <a
+      href="https://reuse.software/practices/2.0/">https://reuse.software/practices/2.0/</a>.
+      Materials and tools for developers are available at <a href="https://reuse.software/dev/">https://reuse.software/dev/</a>.
+    </p>
+  </div>
+</section>
+
+<a name ="how"/>  
+<section class="bg-light">
+  <div class="container">
+    <h2>
+      How it works 
+    </h2>
+    <p>
+      If you enter an URL of a Git repository, we will clone the Git repository
+      with the indicated URL and check if the repository fulfills the recommended
+      practices according to the REUSE initiative.
+    </p>  
+    <p>
+      To evaluate whether a repository is compliant or not to the best
+      practices proposed by the REUSE initiative, we had extracted test cases
+      from the practices described at <a
+      href="https://reuse.software/practices/2.0/">https://reuse.software/practices/2.0/</a>.
+      Each test case verifies if a specific best practice is implemented or not.
+      Based on the results of the test cases, we evaluate the degree to which a
+      repository fulfills the best practices.      
+    </p>    
+    <p>
+      In detail, we evaluate three aspects:
+    </p>
+
+    <%= render ReuseWeb.PageView, "_checks.html", conn: @conn %>
+  </div>
+</section>

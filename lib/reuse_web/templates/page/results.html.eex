@@ -1,0 +1,115 @@
+<!--
+Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+                   Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+                   Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+
+This file is part of the project reuse-checker which is released under the MIT license.
+See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+
+SPDX-License-Identifier: MIT
+-->
+
+<section class="">
+  <div class="container">
+    <h2>
+      Results of a study of multiple repositories
+    </h2>
+    <p>
+      This page reports about the results of a study involving multiple repositories. The following parameters are given at the beginning:
+    </p>
+    <ul>
+      <li>Number of repositories planned for this study: <b><%=@results.number_of_repositories%></b></li>
+      <li>Number of machines used in this study: <b><%=@results.number_of_machines%></b></li>
+    </ul>      
+    <p>
+      The analyzed repositories and files are:
+    </p>
+    <ul>
+      <li>Number of repositories analyzed so far: <b><%=@results.number_of_repositories_analyzed%></b></li>
+      <li>Number of files analyzed so far: <b><%=@results.number_of_files_analyzed%></b></li>
+      <li>Number of repositories that could not be downloaded: <b><%=@results.does_not_exist_anymore%></b></li>
+      <li>Number of repositories used as a basis for the calculation of percentages: <b><%=@results.basis_repositories%></b></li>
+      <li>Number of files used as a basis for the calculation of percentages: <b><%=@results.number_of_files_analyzed%></b></li>
+    </ul>
+    <p>
+      The results for properties regarding the repositories are:
+    </p>
+    <ul>      
+      <li>Number of repositories for which the <b>readme file</b> exists: <b><%=@results.absolute_readme_exists%> (<%=@results.relative_readme_exists%>%)</b></li>
+      <li>Number of repositories for which a <b>single license file</b> exists: <b><%=@results.absolute_single_license_file_exists%> (<%=@results.relative_single_license_file_exists%>%)</b></li>
+      <li>Number of repositories for which the <b>spdx license file</b> exists: <b><%=@results.absolute_spdx_license_file_exists%> (<%=@results.relative_spdx_license_file_exists%>%)</b></li>
+      <li>Number of repositories for which the <b>license folder</b> exists: <b><%=@results.absolute_license_folder_exists%> (<%=@results.relative_license_folder_exists%>%)</b></li>
+      <li>Number of repositories for which the <b>debian license folder</b> exists: <b><%=@results.absolute_debian_license_folder_exists%> (<%=@results.relative_debian_license_folder_exists%>%)</b></li>
+      <li>Number of repositories for which the <b>all used licenses are present</b> in license folder: <b><%=@results.absolute_all_used_licenses_are_present_in_license_folder%> (<%=@results.relative_all_used_licenses_are_present_in_license_folder%>%)</b></li>
+      <li>Number of repositories for which the <b>authors file</b> exists: <b><%=@results.absolute_authors_file_exists%> (<%=@results.relative_authors_file_exists%>%)</b></li>
+    </ul> 
+
+    <canvas id="repository_results" width="800" height="230"></canvas>
+    <script type="text/javascript"> 
+      new Chart(document.getElementById("repository_results"), {
+      type: 'horizontalBar',
+      data: {
+        labels: ["readme", "single license", "spdx license", "license folder", "debian folder", "all licenses present", "authors"],
+        datasets: [
+          {            
+            backgroundColor: ["#008BA3", "#00CCF0","#A34F00","#F04C00","#5C5C5C","#A3A3A3"],
+            data: [<%=@results.absolute_readme_exists%>,<%=@results.absolute_single_license_file_exists%>,<%=@results.absolute_spdx_license_file_exists%>,
+              <%=@results.absolute_license_folder_exists%>,<%=@results.absolute_debian_license_folder_exists%>,<%=@results.absolute_all_used_licenses_are_present_in_license_folder%>,<%=@results.absolute_authors_file_exists%>]
+          }
+        ]
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: false,
+          text: ''
+        },
+        tooltips: {
+         enabled: true
+        } 
+      }
+    });
+    </script>
+
+    <p style="padding-top:12px">
+      The results for properties regarding the files within the repositories are:
+    </p>
+    <ul>      
+      <li>Number of files with <b>copyright information</b>: <b><%=@results.absolute_files_has_copyright%> (<%=@results.relative_files_has_copyright%>%)</b></li>
+      <li>Number of files with <b>license found in file	</b>: <b><%=@results.absolute_files_license_found_in_file%> (<%=@results.relative_files_license_found_in_file%>%)</b></li>
+      <li>Number of files with <b>license found in .license</b>: <b><%=@results.absolute_files_license_found_in_dot_license%> (<%=@results.relative_files_license_found_in_dot_license%>%)</b></li>
+      <li>Number of files with <b>license found in debian format</b>: <b><%=@results.absolute_files_license_found_in_debian_format%> (<%=@results.relative_files_license_found_in_debian_format%>%)</b></li>
+      <li>Number of files with <b>license found in .spdx</b>: <b><%=@results.absolute_files_license_found_in_dot_spdx%> (<%=@results.relative_files_license_found_in_dot_spdx%>%)</b></li>
+      <li>Number of files where <b>a spdx license expression exists</b>: <b><%=@results.absolute_files_spdx_license_expression_exists%> (<%=@results.relative_files_spdx_license_expression_exists%>%)</b></li>
+      <li>Number of files with <b>a valid spdx license expression</b>: <b><%=@results.absolute_files_spdx_license_expression_is_valid%> (<%=@results.relative_files_spdx_license_expression_is_valid%>%)</b></li>
+    </ul> 
+
+    <canvas id="files_results" width="800" height="200"></canvas>
+    <script type="text/javascript"> 
+      new Chart(document.getElementById("files_results"), {
+      type: 'horizontalBar',
+      data: {
+        labels: ["copyright present", "license in file", "license in .license", "license in debian format", "license in spdx", "valid spdx"],
+        datasets: [
+          {            
+            backgroundColor: ["#008BA3", "#00CCF0","#A34F00","#F04C00","#5C5C5C","#A3A3A3","#008BA3", "#00CCF0","#A34F00","#F04C00","#5C5C5C","#A3A3A3"],
+            data: [<%=@results.absolute_files_has_copyright%>,<%=@results.absolute_files_license_found_in_file%>,<%=@results.absolute_files_license_found_in_dot_license%>,
+              <%=@results.absolute_files_license_found_in_debian_format%>,<%=@results.absolute_files_license_found_in_dot_spdx%>,
+              <%=@results.absolute_files_spdx_license_expression_exists%>,<%=@results.absolute_files_spdx_license_expression_is_valid%>]
+          }
+        ]
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: false,
+          text: 'Predicted world population (millions) in 2050'
+        },
+        tooltips: {
+         enabled: true
+        } 
+      }
+    });
+    </script>
+  </div>
+</section>

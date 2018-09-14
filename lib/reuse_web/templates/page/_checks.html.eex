@@ -1,0 +1,58 @@
+<!--
+Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+                   Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+                   Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+
+This file is part of the project reuse-checker which is released under the MIT license.
+See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+
+SPDX-License-Identifier: MIT
+-->
+
+<ol class="markdown-toc">
+<li><b>Provide each license used in repository:</b>
+<p>
+  For each license used in your project, you must include its text in the project's root directory. We check whether the project has:
+  
+  <ul class="markdown-toc">
+    <li>A single license file</li>
+    <li>A license folder</li>
+  </ul>
+  
+  <br/>Ultimately we check also if all licenses you declared in each file of the
+  project are present in one of those files. For the completeness of our
+  tool we also look for a readme and an authors file, please note that the
+  presence or not of those files does not affect the way your project is
+  compliant or not.
+</p></li>
+
+<li><b>Include copyright and license notices in all files:</b>
+<p>
+  Each file of your project must be linked to a license present in the 
+  <a href="https://spdx.org/licenses/">SPDX license list</a> and it must also have a copyright notice.
+  We check for those information in each file by looking for an header in:
+
+  <ul class="markdown-toc">
+    <li>The file itself</li>
+    <li>A <code>.license</code> correspondent file</li>
+    <li>A DEP-5/copyright format file</li>
+    <li>A <code>.spdx</code> file</li>
+  </ul>
+
+  <br/>Furthermore, we check whether the declared SPDX identifiers are valid or not. 
+  Please note that if a file is bigger than <kbd>5MB</kbd> it will get skipped by our tool because it will get identified as binary file.
+</p></li>
+
+<li><b>Provide an inventory for included software:</b>
+<p>
+  If you are able to automatically generate a list
+  of all files in <code>.spdx</code> format you should adopt this
+  solution. For example, using the tool on <a
+  href="https://git.fsfe.org/reuse/reuse">https://git.fsfe.org/reuse/reuse</a>.
+  To check for this requirement, we look for a <code>LICENSE.spdx</code> file
+  and extract all declared files from it and than check if all files in
+  your project are declared correctly. Please note that this option
+  is only recommended and not required by the REUSE practices, hence it
+  does not effect the way your project is compliant or not if the
+  <code>LICENSE.spdx</code> is not present.
+</p></ol>

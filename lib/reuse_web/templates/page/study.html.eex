@@ -1,0 +1,196 @@
+<!--
+Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+                   Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+                   Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+
+This file is part of the project reuse-checker which is released under the MIT license.
+See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+
+SPDX-License-Identifier: MIT
+-->
+
+<div id="yesno" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">        
+        <h4 class="modal-title">Warning</h4>
+        <button type="button" class="close" data-dismiss="modal"><img src="images/x.svg"></button>
+      </div>
+      <div class="modal-body">
+        <p>You are about to clean all results assigned to this machine. Are you sure you want to continue?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="clean_all" type="button" class="btn btn-danger" data-dismiss="modal">Hell, yeah!</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="yesno_unfinished" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">        
+        <h4 class="modal-title">Warning</h4>
+        <button type="button" class="close" data-dismiss="modal"><img src="images/x.svg"></button>
+      </div>
+      <div class="modal-body">
+        <p>You are about to delete all unfinished results assigned to this machine. Are you sure you want to continue?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="clean_all_unfinished" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="">
+  <div class="container">
+    <h2>
+      Study of multiple repositories
+    </h2>
+    <p>
+      This page reports about the progress of a study involving multiple repositories. The following parameters are given at the beginning:
+    </p>
+    <ul>
+      <li>Machine ID: <b><%=Application.get_env(:reuse, :machine_id) %></b></li>
+      <li>Number of repositories assigned to this machine at start: <b><span id="workload"><%=@workload%></span></b></li>
+    </ul>
+    <p>
+      <button id="start_study" type="button" class="btn btn-primary">Start study</button>
+      <button id="stop_study" type="button" class="btn btn-warning">Stop study</button>
+      <button id="ask_to_clean_all" data-toggle="modal" data-target="#yesno" class="btn btn-danger">Clean results</button>      
+      <button id="ask_to_clean_all_unfinished" data-toggle="modal" data-target="#yesno_unfinished" class="btn btn-warning">Clean unfinished results</button>      
+    </p>  
+    <p>
+      Overall progress:
+      <%# <div style="width: 100%;background-color: grey;">
+        <div id="progress" style="width: 0%;height: 30px;background-color: #003e7c;"></div>
+      </div> %>
+      <div class="progress" style="height: 30px;">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" id="progress"></div>
+      </div>
+    </p>  
+    <p>
+      Details:
+    </p>
+    <ul>  
+      <li>Number of repositories waiting to be assigned: <b><span id="remaining"><%=@workload%></span></b></li>
+      <li>Time the analysis started: <b><span id="begin">(Not started)</span></b></li>
+      <li>Time the analysis ended: <b><span id="end">(Not ended)</span></b></li>
+      <li>Repositories currently analyzed: <b><span id="repository_list">(Not started)</span></b></li>
+      <ol id="repositories">  
+      </ol>
+    </ul>    
+  </div>
+</section>
+
+<script type="text/javascript"> 
+  let app = require("js/app");
+
+  function getTimestamp() {
+    var currentdate = new Date(); 
+    var datetime = currentdate.getDate() + "."
+                + (currentdate.getMonth()+1)  + "." 
+                + currentdate.getFullYear() + " "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+    return datetime;
+  }
+
+  app.channel.on_update(function(payload) {
+    switch (payload.command) { 
+      case "begin_study":     
+        $("#begin").text(getTimestamp());
+        break;
+      case "end_study":  
+        $("#end").text(getTimestamp());
+        $("#start_study").removeAttr("disabled");        
+        $("#ask_to_clean_all").removeAttr("disabled");
+        break;
+      case "add_repository":                
+        var new_repository = $("<li></li>");         
+        new_repository.attr("id", "repository_" + payload.todo_id);
+        new_repository.text(payload.repository_url);
+        new_repository.appendTo("#repositories");
+        var new_repo_spinner= $("<div class=\"loader\"></div>");
+        new_repo_spinner.attr("id", "repo_spinner_" + payload.todo_id);
+        new_repo_spinner.appendTo("#repository_" + payload.todo_id);
+        $("#repository_list").text("");
+        break;
+      case "remove_repository":        
+        $("#repository_" + payload.todo_id).remove();        
+        break;
+      case "downloaded_repository":        
+        $("#repository_" + payload.todo_id).css("color", "green");
+        $("#repo_spinner_" + payload.todo_id).css("border-top", "3px solid green");        
+        break;
+      case "progress":        
+        $("#remaining").text(payload.remaining);
+        $("#progress").css("width", payload.progress + "%");
+        break;
+      case "remove_repository_triggered":
+        $("#repository_" + payload.todo_id).css("color", "red");
+        $("#repo_spinner_" + payload.todo_id).css("border-top", "3px solid red");
+        break;
+    }
+  });
+
+  $("#start_study").on("click", function(event) {
+    $("#start_study").prop("disabled", true);
+    $("#ask_to_clean_all").prop("disabled", true);
+    $("#ask_to_clean_all_unfinished").prop("disabled", true);
+    $.ajax({
+      url: "/dispatch"
+    });
+  });
+
+  $("#stop_study").on("click", function(event) {    
+    $.ajax({
+      url: "/abort"
+    }).then(function(result) {      
+      $("#start_study").removeAttr("disabled");        
+      $("#ask_to_clean_all").removeAttr("disabled");        
+      $("#ask_to_clean_all_unfinished").removeAttr("disabled");        
+    });
+  });
+
+  $("#clean_all").on("click", function(event) {
+    $.ajax({
+      url: "/clean"
+    }).then(function(result) {
+      $("#workload").text(result.workload);
+      $("#begin").text("(Not started)");
+      $("#end").text("(Not ended)");
+      $("#remaining").text(result.workload);      
+      $("#repository_list").text("(Not started)");
+      $("#repositories").text("");
+      $("#start_study").removeAttr("disabled");        
+      $("#ask_to_clean_all").removeAttr("disabled");     
+      $("#ask_to_clean_all_unfinished").removeAttr("disabled");        
+      $("#progress").css("width", "0%");   
+    });
+  });
+
+  $("#clean_all_unfinished").on("click", function(event) {
+    $.ajax({
+      url: "/clean_unfinished"
+    }).then(function(result) {
+      $("#workload").text(result.workload);
+      $("#begin").text("(Not started)");
+      $("#end").text("(Not ended)");
+      $("#remaining").text(result.workload);      
+      $("#repository_list").text("(Not started)");
+      $("#repositories").text("");
+      $("#start_study").removeAttr("disabled");        
+      $("#ask_to_clean_all").removeAttr("disabled");     
+      $("#ask_to_clean_all_unfinished").removeAttr("disabled");     
+      $("#progress").css("width", "0%");   
+    });
+  });
+
+
+  
+</script>

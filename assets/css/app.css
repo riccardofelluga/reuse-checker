@@ -1,0 +1,140 @@
+@font-face {
+  font-family: din-bold;
+  src: url('../fonts/D-DIN-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: din;
+  src: url('../fonts/D-DIN.woff') format('woff');  
+}
+
+@font-face {
+  font-family: din-condensed;
+  src: url('../fonts/D-DINCondensed.woff') format('woff');  
+}
+
+body {
+  font-family: din, Helvetica, sans-serif;
+  font-size: 1rem;  
+}
+
+header.masthead {  
+  position: relative;
+  background-color: #000000;    
+  background: url("../images/bg.jpg") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover; 
+  background-size: auto;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
+header.masthead .overlay {
+  position: absolute;
+  background-color: #343a40;  
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
+
+header.masthead h1 {
+  color: #ffffff;
+  font-size: 2rem;
+}
+
+@media (min-width: 768px) {
+  header.masthead {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+  }
+  header.masthead h1 {
+    font-size: 3rem;
+  }
+}
+
+.features-icons {
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+.features-icons .features-icons-item {
+  max-width: 20rem;
+}
+
+.features-icons .features-icons-item .features-icons-icon {
+  height: 7rem;
+}
+
+.features-icons .features-icons-item .features-icons-icon i {
+  font-size: 4.5rem;
+}
+
+.features-icons .features-icons-item:hover .features-icons-icon i {
+  font-size: 5rem;
+}
+
+footer {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  background-color: #f8f9fa;  
+  color: #000000;  
+}
+
+footer a {
+  color: #000000;
+}
+
+footer a:hover {
+  color: #000000;
+}
+
+section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.features-icons a {
+  color: #000000;
+}
+
+.features-icons a:hover {
+  color: #000000;
+}
+
+
+.loader {
+  border: 3px solid #f3f3f3; /* background */
+  border-top: 3px solid #000000;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+  margin-left: 0.5em;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-analyzer {
+  border: 4px solid #f3f3f3; /* background */
+  border-top: 4px solid#000000;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+  margin-left: 0.5em;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
