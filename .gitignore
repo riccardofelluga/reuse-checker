@@ -40,8 +40,10 @@ npm-debug.log
 # variables.
 /config/*.secret.exs
 
+# Temporary directory for downloaded repositories
+/repos
+
 # Other stuff
 /.elixir_ls/
 /config/local.exs
-/repos
 **/.DS_Store
