@@ -9,4 +9,4 @@ The overall idea of reuse-checker is depicted in the figure below: several machi
 
 ![Overall idea][figure1]
 
-[figure1]: https://github.com/riccardofelluga/reuse-checker/documentation/idea.png "Overall idea of reuse-checker"
+[figure1]: https://github.com/riccardofelluga/reuse-checker/blob/master/documentation/idea.png "Overall idea of reuse-checker"
