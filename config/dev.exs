@@ -1,3 +1,14 @@
+#
+# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+#                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+#                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+#
+# This file is part of the project reuse-checker which is released under the MIT license.
+# See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+# 
+# SPDX-License-Identifier: MIT
+#
+
 use Mix.Config
 
 # For development, we disable any cache and enable
@@ -54,13 +65,6 @@ config :logger, level: :info
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
 
-# Configure your database
-config :reuse, Reuse.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "eGu+7V;{9t!LbQ<Y",
-  database: "reuse_dev",
-  hostname: "localhost",
-  pool_size: 50,
-  timeout: 1_000_000,
-  port: 5432
+# See the README if you do not have a dev.secret.exs
+import_config "dev.secret.exs"
+

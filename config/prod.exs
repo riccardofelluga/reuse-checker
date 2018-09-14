@@ -1,3 +1,14 @@
+#
+# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
+#                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
+#                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+#
+# This file is part of the project reuse-checker which is released under the MIT license.
+# See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+# 
+# SPDX-License-Identifier: MIT
+#
+
 use Mix.Config
 
 # For production, we often load configuration from external
@@ -61,6 +72,5 @@ config :logger, level: :info
 #     config :reuse, ReuseWeb.Endpoint, server: true
 #
 
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
+# See the README if you do not have a prod.secret.exs
 import_config "prod.secret.exs"
