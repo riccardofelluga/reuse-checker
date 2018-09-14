@@ -24,6 +24,8 @@ defmodule Reuse.Parse.ParseRepository do
   @number_of_workers 1000
 
   def analyze_repository(repository_url, todo_id) do
+    Logger.info("Start analyzing #{repository_url}.")
+
     repository_dir = "repos/#{todo_id}"
 
     try do

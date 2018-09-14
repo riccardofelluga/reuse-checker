@@ -30,6 +30,7 @@ defmodule Reuse.Todo do
   def changeset(repository, attrs) do
     repository
     |> cast(attrs, [
+      :id,
       :url,
       :started,
       :completed,

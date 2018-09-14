@@ -35,18 +35,21 @@ defmodule ReuseWeb.PageController do
   def analyzing(conn, %{"url" => url}) do
     case validate_uri(url) do
       {:ok, _} ->
-        # Do the dirty job here
         todo_id = Db.insert_todo(url)
         Db.update_todo(todo_id, %{started: true})
-        Db.insert_default_repo(todo_id)
+        Db.add_to_repositories(todo_id)
 
         Task.start(fn ->
-          Reuse.Parse.ParseRepository.analyze_repository(url, todo_id)
+          try do
+            Reuse.Parse.ParseRepository.analyze_repository(url, todo_id)
 
-          ReuseWeb.Endpoint.broadcast("update:progress", "update_message", %{
-            command: :end_study,
-            todo_id: todo_id
-          })
+            ReuseWeb.Endpoint.broadcast("update:progress", "update_message", %{
+              command: :end_study,
+              todo_id: todo_id
+            })
+          after
+            Db.delete_by_id(todo_id)
+          end
         end)
 
         render(conn, "analyzing.html", repository: url)

@@ -33,7 +33,7 @@ defmodule Reuse.Dispatch.Dispatcher do
       if Db.count_remaining() != 0 do
         %Todo{id: todo_id, url: repository_url} = Db.get_next_todo()
         Db.update_todo(todo_id, %{started: true})
-        Db.insert_default_repo(todo_id)
+        Db.add_to_repositories(todo_id)
 
         ReuseWeb.Endpoint.broadcast("update:progress", "update_message", %{
           command: :add_repository,

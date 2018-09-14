@@ -76,26 +76,13 @@ defmodule Reuse.Db do
 
   def insert_todo(url) do
     machine = Application.get_env(:reuse, :machine_id)
+    todo_id = Ecto.UUID.generate()
 
-    case Repo.get_by(Todo, url: url) do
-      nil ->
-        %Todo{}
-        |> Todo.changeset(%{assigned_to_machine: machine, url: url, study: 0})
-        |> Repo.insert!()
+    %Todo{}
+    |> Todo.changeset(%{id: todo_id, assigned_to_machine: machine, url: url, study: 0})
+    |> Repo.insert!()
 
-        %{id: todo_id} =
-          Repo.get_by(Todo, url: url)
-          |> Map.from_struct()
-
-        todo_id
-
-      schema ->
-        %{id: todo_id_from_db} = Map.from_struct(schema)
-
-        clean_by_id(todo_id_from_db)
-
-        todo_id_from_db
-    end
+    todo_id
   end
 
   def count_remaining() do
@@ -220,7 +207,7 @@ defmodule Reuse.Db do
     %{workload: count_remaining()}
   end
 
-  def clean_by_id(todo_id) do
+  def delete_by_id(todo_id) do
     query1 =
       from(f in File,
         where: f.todo_id == ^todo_id
@@ -244,12 +231,11 @@ defmodule Reuse.Db do
     Repo.delete_all(query1)
     Repo.delete_all(query2)
     Repo.delete_all(query4)
-
-    Repo.update_all(query3, set: [started: false, completed: false, does_not_exist_anymore: false])
+    Repo.delete_all(query3)
   end
 
   ## REPOSITORY tools
-  def insert_default_repo(todo_id) do
+  def add_to_repositories(todo_id) do
     %Repository{}
     |> Repository.changeset(%{todo_id: todo_id})
     |> Repo.insert!()
