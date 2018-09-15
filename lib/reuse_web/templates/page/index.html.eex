@@ -12,7 +12,7 @@ SPDX-License-Identifier: MIT
     <div class="modal-content">
       <div class="modal-header">        
         <h4 class="modal-title">Error</h4>
-        <button type="button" class="close" data-dismiss="modal"><img src="<%= static_path(@conn, "/images/x.svg") %>"></button>
+        <button type="button" class="close" data-dismiss="modal"><img src="<%= static_path(@conn, "/images/feather-x.svg") %>"></button>
       </div>
       <div class="modal-body">
         <p><%= get_flash(@conn, :input_error) %></p>

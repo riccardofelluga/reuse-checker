@@ -78,30 +78,61 @@ which contains the first 4096 bytes of a file in case of an error.
 ## How to use install and use reuse-checker
 To install and use reuse-checker, you need to perform the following steps:
 
-*  Download and install the Phoenix Framework from <https://phoenixframework.org/>.
-*  Download and install PostgreSQL from <https://www.postgresql.org/>
-*  Download the source code from  <https://github.com/riccardofelluga/reuse-checker>
-*  If you want to run the version to check a single repository:
-   * Start Reuse-Checker running **mix phx.server** within the root project directory.
-   * Open <http://localhost:4000>.
-   * You can enter the repository to check and you will see the results after it
-     has been downloaded and evaluated.
-*  If you want to run the version to study many repositories: 
-   * Prepare a list of GitHub repositories to evaluate and store it in the table
-     "todos" (setting the url of each repositories in the field "url", setting
-     "started" and "completed" to false, assigning a machine id to the
-     repository in "assigned_to_machine" (see above), assigning a study number,
-     e.g., 1.
-   *  Start Reuse-Checker running **mix phx.server** within the root project directory.
-   *  Open <http://localhost:4000/study>. This will display a web site that
-      allows the user to start the analysis, stop it, reset it completely, or to
-      reset only repositories not completely analyzed yet. These options where
-      written to ease the analysis of a large number of repositories, which is
-      often interrupted/fails because of various reasons, e.g., no more
-      available space on the hard disk, a lost Internet connection, etc.
-   *  After a study is completed, one can see the results calling
-      <http://localhost:4000/results?study=1>, assuming that the study id is
-      1 as in the example above.
+* Download and install the Phoenix Framework from <https://phoenixframework.org/>.
+* Download and install PostgreSQL from <https://www.postgresql.org/>
+* Download the source code from  <https://github.com/riccardofelluga/reuse-checker>
+* Configure the database creating two files:
+  * Create dev.secret.exs within the config directory with the following contents:
+    use Mix.Config
+    
+    config :reuse, Reuse.Repo,
+      adapter: Ecto.Adapters.Postgres,
+      username: "postgres",
+      password: "Your database password",
+      database: "reuse_dev",
+      hostname: "localhost",
+      pool_size: 10,
+      timeout: 1_000_000
+
+    Configure the database connection as you have it in your installation.
+
+  * Create prod.secret.exs within the config directory with the following contents:
+    use Mix.Config
+    config :reuse, ReuseWeb.Endpoint,      
+      http: [port: 4444],
+      url: [host: "(your hostname)", port: 4444]
+
+    config :reuse, Reuse.Repo,
+      adapter: Ecto.Adapters.Postgres,
+      username: "postgres",
+      password: "Your database password",
+      database: "reuse_prod",
+      pool_size: 20,
+      timeout: 1_000_000
+
+    Configure the web server and database connection as you have it in your installation.
+
+* If you want to run the version to check a single repository:
+  * Start Reuse-Checker running **mix phx.server** within the root project directory.
+  * Open <http://localhost:4000>.
+  * You can enter the repository to check and you will see the results after it
+    has been downloaded and evaluated.
+* If you want to run the version to study many repositories: 
+  * Prepare a list of GitHub repositories to evaluate and store it in the table
+    "todos" (setting the url of each repositories in the field "url", setting
+    "started" and "completed" to false, assigning a machine id to the repository
+    in "assigned_to_machine" (see above), assigning a study number, e.g., 1.
+  * Start Reuse-Checker running **mix phx.server** within the root project
+    directory.
+  * Open <http://localhost:4000/study>. This will display a web site that allows
+    the user to start the analysis, stop it, reset it completely, or to reset
+    only repositories not completely analyzed yet. These options where written
+    to ease the analysis of a large number of repositories, which is often
+    interrupted/fails because of various reasons, e.g., no more available space
+    on the hard disk, a lost Internet connection, etc.
+  * After a study is completed, one can see the results calling
+    <http://localhost:4000/results?study=1>, assuming that the study id is
+    1 as in the example above.
 
 ## Source code documentation
 
@@ -128,6 +159,28 @@ a standard folder structure of a Phoenix Framework Web project:
 *  The folder **rel** contains code to automatically perform database migrations
    after a deployment. The folder **resources** contains the list of randomly
    picked GitHub repositories mentioned above.
+
+The source code folder **lib** is structured as follows:
+
+The folder **reuse** contains the core source code that performs the actual
+analysis of a repository, the folder **reuse_web** contains source code that
+contains web pages, controllers, i.e. source code that call code within the
+**reuse** folder to perform the actual analysis, obtains the results, and
+visualizes them. The **reuse** folder contains the following:
+
+* analysis: contains all the queries to execute once a multi-repository or a
+  single-repository study is terminated. This code is executed when a user
+  calles the page <http://localhost/results?study=1>, assuming that the study id
+  is 1.
+* dispatch: contains all code to start a study and to distribute it over a
+  number of sub-processes (currently set to 10).
+* parse: contains the code to parse a repository (scanning all files, evaluating
+  their compliance with the REUSE guidelines) and to distribute the scanning
+  process over various sub-processes (currently set to 1,000).
+* release: contains code required to perform eventual database migrations after
+  deployment
+* tools: contains utility functions to read a list of work items and distribute
+  it over various workers.
 
 [figure1]: https://github.com/riccardofelluga/reuse-checker/blob/master/documentation/idea.png "Overall idea of reuse-checker"
 [figure2]: https://github.com/riccardofelluga/reuse-checker/blob/master/documentation/database.png "Database structure"
