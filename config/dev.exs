@@ -1,7 +1,5 @@
 #
-# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
-#                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
-#                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
 #
 # This file is part of the project reuse-checker which is released under the MIT license.
 # See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
@@ -20,7 +18,7 @@ use Mix.Config
 config :reuse, ReuseWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
-  code_reloader: true,
+  code_reloader: false,
   check_origin: false,
   watchers: [
     node: [
@@ -60,7 +58,7 @@ config :reuse, ReuseWeb.Endpoint,
 
 # Do not include metadata nor timestamps in development logs
 # config :logger, :console, format: "[$level] $message\n"
-config :logger, level: :debug
+config :logger, level: :info
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20

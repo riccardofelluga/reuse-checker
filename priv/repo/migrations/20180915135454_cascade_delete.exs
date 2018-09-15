@@ -7,16 +7,23 @@
 # SPDX-License-Identifier: MIT
 #
 
-defmodule Reuse.Repo.Migrations.Error do
+defmodule Reuse.Repo.Migrations.CascadeDelete do
   use Ecto.Migration
 
   def change do
+    drop constraint(:files, "files_todo_id_fkey")
     alter table(:files) do
-      add(:error, :boolean, default: false, null: false)
+      modify :todo_id, references(:todos, on_delete: :delete_all, type: :binary_id)
     end
 
+    drop constraint(:licenses, "licenses_todo_id_fkey")
+    alter table(:licenses) do
+      modify :todo_id, references(:todos, on_delete: :delete_all, type: :binary_id)
+    end
+
+    drop constraint(:repositories, "repositories_todo_id_fkey")
     alter table(:repositories) do
-      add(:error, :boolean, default: false, null: false)
+      modify :todo_id, references(:todos, on_delete: :delete_all, type: :binary_id)
     end
   end
 end

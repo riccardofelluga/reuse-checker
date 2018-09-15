@@ -1,7 +1,5 @@
 # 
-# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
-#                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
-#                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
 #
 # This file is part of the project reuse-checker which is released under the MIT license.
 # See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
@@ -74,15 +72,20 @@ defmodule Reuse.Db do
     Repo.one(query)
   end
 
-  def insert_todo(url) do
-    machine = Application.get_env(:reuse, :machine_id)
-    todo_id = Ecto.UUID.generate()
+  def is_already_in_progress(url, ip) do
+    query =
+      from(t in Todo,
+        where: t.url == ^url and t.started == true and t.completed == false and t.ip == ^ip,
+        select: t.id
+      )
 
+    Repo.aggregate(query, :count, :url) > 0
+  end
+
+  def insert_single_todo_item(id, url, ip) do
     %Todo{}
-    |> Todo.changeset(%{id: todo_id, assigned_to_machine: machine, url: url, study: 0})
-    |> Repo.insert!()
-
-    todo_id
+    |> Todo.changeset(%{id: id, url: url, ip: ip, study: 0})
+    |> Repo.insert()
   end
 
   def count_remaining() do
@@ -119,6 +122,11 @@ defmodule Reuse.Db do
       )
 
     Repo.aggregate(query, :count, :id)
+  end
+
+  def get_url_by_id(id) do
+    entry = Repo.get_by(Todo, id: id)
+    entry.url
   end
 
   def update_todo(id, attrs) do
@@ -208,30 +216,12 @@ defmodule Reuse.Db do
   end
 
   def delete_by_id(todo_id) do
-    query1 =
-      from(f in File,
-        where: f.todo_id == ^todo_id
-      )
-
-    query2 =
-      from(r in Repository,
-        where: r.todo_id == ^todo_id
-      )
-
-    query3 =
+    query =
       from(t in Todo,
         where: t.id == ^todo_id
       )
 
-    query4 =
-      from(l in License,
-        where: l.todo_id == ^todo_id
-      )
-
-    Repo.delete_all(query1)
-    Repo.delete_all(query2)
-    Repo.delete_all(query4)
-    Repo.delete_all(query3)
+    Repo.delete_all(query)
   end
 
   ## REPOSITORY tools
@@ -261,12 +251,15 @@ defmodule Reuse.Db do
   end
 
   def insert_files(file_list \\ []) do
+    # This is the original implementation but it contains a bug
     # Enum.chunk_every(file_list, 20_000)
     # |> Enum.each(fn chunk ->
     #   Ecto.Multi.new()
     #   |> Ecto.Multi.insert_all(:file, File, chunk)
     #   |> Repo.transaction()
     # end)
+
+    # Current implementation but slow
     Enum.each(file_list, fn file ->
       %File{}
       |> File.changeset(file)

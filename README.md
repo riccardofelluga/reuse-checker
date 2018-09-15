@@ -75,7 +75,7 @@ bill of materials file according to the SPDX specification. Finally, the field
 "license_header_in_case_of_error" is a field we used for debugging purposes,
 which contains the first 4096 bytes of a file in case of an error.
 
-** How to use install and use reuse-checker
+## How to use install and use reuse-checker
 To install and use reuse-checker, you need to perform the following steps:
 
 *  Download and install the Phoenix Framework from <https://phoenixframework.org/>.
@@ -104,7 +104,25 @@ To install and use reuse-checker, you need to perform the following steps:
       \url{http://localhost:4000/results?study=1}, assuming that the study id is
       1 as in the example above.
 
-** Source code documentation
+## Source code documentation
+
+All folders except the folders **rel** and **resources** correspond to
+a standard folder structure of a Phoenix Framework Web project:
+
+* The folder **assets** contains all file loaded by the browser once a web page
+  is visualized, such as css files, fonts, JavaScript files (.js files),
+  JavaScript files organized through the Node Package Manager
+  npm (<https://www.npmjs.com/>), and images.
+*  The folder **config** contains configuration files, which need to be
+   configured to use Reuse-Checker to perform a multi-repository analysis. Since
+   Reuse-Checker was designed to support being executed on multiple machines,
+   the current machine ID has to be configured in the file config.exs, which one
+   can find in the folder **config** setting a value for the setting
+   "machine_id".
+*  The folder \texttt{deps} contains all dependent packages and is generated automatically running \texttt{mix deps.get} within the root project directory.
+*  The folder \texttt{lib} contains all source code and is explained in detail below. 
+*  The folder \texttt{priv} contains (among other files we do not use) database migration scripts. The database can be created using the command \texttt{mix ecto.create} and the migration scripts can be executed using the command \texttt{mix ecto.migrate} from the root project directory. 
+*  The folder \texttt{rel} contains code to automatically perform database migrations after a deployment. The folder \texttt{resources} contains the list of randomly picked GitHub repositories mentioned above.
 
 
 

@@ -1,7 +1,5 @@
 # 
-# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, 
-#                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, 
-#                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+# Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
 #
 # This file is part of the project reuse-checker which is released under the MIT license.
 # See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
@@ -22,6 +20,7 @@ defmodule Reuse.Todo do
     field(:does_not_exist_anymore, :boolean, default: false)
     field(:assigned_to_machine, :integer)
     field(:study, :integer)
+    field(:ip, :string)
 
     timestamps()
   end
@@ -32,6 +31,7 @@ defmodule Reuse.Todo do
     |> cast(attrs, [
       :id,
       :url,
+      :ip,
       :started,
       :completed,
       :does_not_exist_anymore,
@@ -39,8 +39,7 @@ defmodule Reuse.Todo do
       :study
     ])
     |> validate_required([
-      :url,
-      :assigned_to_machine
+      :url
     ])
   end
 end

@@ -10,9 +10,7 @@
     "fileHeaderComment.template": {
         "*": [
             "${commentprefix}",
-            "${commentprefix} Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, ",
-            "${commentprefix}                    Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, ",
-            "${commentprefix}                    Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>",
+            "${commentprefix} Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>",
             "${commentprefix}",
             "${commentprefix} This file is part of the project reuse-checker which is released under the MIT license.",
             "${commentprefix} See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.",
