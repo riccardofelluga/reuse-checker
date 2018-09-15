@@ -21,8 +21,8 @@ steps:
 
 * The URL of the next repository, assigned to the machine and that has not yet
   been analyzed is obtained from the database (step 1).
-* The repository is cloned locally using the command line switch \texttt{--depth
-  1} to omit downloading all commits of the past (steps 2 and 3).
+* The repository is cloned locally using the command line switch **--depth 1**
+  to omit downloading all commits of the past (steps 2 and 3).
 * The repository is analyzed and the results are written to the central database (step 4).
 
 The database structure (using crow's foot notation) of the database holding the repositories to analyze and the results is depicted in the figure below. All tables have two fields "inserted_at" and "updated_at", which contain a time stamp indicating when a record was created or updated.
@@ -93,15 +93,14 @@ To install and use reuse-checker, you need to perform the following steps:
      repository in "assigned_to_machine" (see above), assigning a study number,
      e.g., 1.
    *  Start Reuse-Checker running **mix phx.server** within the root project directory.
-   *  Open <http://localhost:4000/study>. This will display the web site shown
-      in figure \ref{fig:checker-screen-shot}, which allows the user to start
-      the analysis, stop it, reset it completely, or to reset only repositories
-      not completely analyzed yet. These options where written to ease the
-      analysis of a large number of repositories, which is often
-      interrupted/fails because of various reasons, e.g., no more available
-      space on the hard disk, a lost Internet connection, etc.
+   *  Open <http://localhost:4000/study>. This will display a web site that
+      allows the user to start the analysis, stop it, reset it completely, or to
+      reset only repositories not completely analyzed yet. These options where
+      written to ease the analysis of a large number of repositories, which is
+      often interrupted/fails because of various reasons, e.g., no more
+      available space on the hard disk, a lost Internet connection, etc.
    *  After a study is completed, one can see the results calling
-      \url{http://localhost:4000/results?study=1}, assuming that the study id is
+      <http://localhost:4000/results?study=1>, assuming that the study id is
       1 as in the example above.
 
 ## Source code documentation
@@ -119,13 +118,16 @@ a standard folder structure of a Phoenix Framework Web project:
    the current machine ID has to be configured in the file config.exs, which one
    can find in the folder **config** setting a value for the setting
    "machine_id".
-*  The folder \texttt{deps} contains all dependent packages and is generated automatically running \texttt{mix deps.get} within the root project directory.
-*  The folder \texttt{lib} contains all source code and is explained in detail below. 
-*  The folder \texttt{priv} contains (among other files we do not use) database migration scripts. The database can be created using the command \texttt{mix ecto.create} and the migration scripts can be executed using the command \texttt{mix ecto.migrate} from the root project directory. 
-*  The folder \texttt{rel} contains code to automatically perform database migrations after a deployment. The folder \texttt{resources} contains the list of randomly picked GitHub repositories mentioned above.
-
-
-
+*  The folder **deps** contains all dependent packages and is generated
+   automatically running **mix deps.get** within the root project directory.
+*  The folder **lib** contains all source code and is explained in detail below.
+*  The folder **priv** contains (among other files we do not use) database
+   migration scripts. The database can be created using the command **mix
+   ecto.create** and the migration scripts can be executed using the command
+   **mix ecto.migrate** from the root project directory. 
+*  The folder **rel** contains code to automatically perform database migrations
+   after a deployment. The folder **resources** contains the list of randomly
+   picked GitHub repositories mentioned above.
 
 [figure1]: https://github.com/riccardofelluga/reuse-checker/blob/master/documentation/idea.png "Overall idea of reuse-checker"
 [figure2]: https://github.com/riccardofelluga/reuse-checker/blob/master/documentation/database.png "Database structure"
