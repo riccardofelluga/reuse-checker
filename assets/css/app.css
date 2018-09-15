@@ -1,16 +1,17 @@
-@font-face {
-  font-family: din-bold;
-  src: url('../fonts/D-DIN-Bold.woff') format('woff');
-}
+/*
+
+Copyright (c) 2018 Andrea Janes <ajanes@unibz.it>, Riccardo Felluga <riccardo.felluga@stud-inf.unibz.it>, Max Schweigkofler <maxelia.schweigkofler@stud-inf.unibz.it>
+
+This file is part of the project reuse-checker which is released under the MIT license.
+See file LICENSE or go to https://github.com/riccardofelluga/reuse-checker for full license details.
+
+SPDX-License-Identifier: MIT
+
+*/
 
 @font-face {
   font-family: din;
   src: url('../fonts/D-DIN.woff') format('woff');  
-}
-
-@font-face {
-  font-family: din-condensed;
-  src: url('../fonts/D-DINCondensed.woff') format('woff');  
 }
 
 body {

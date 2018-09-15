@@ -1,15 +1,5 @@
-Copyright (C) 2017 Datto Inc. https://www.datto.com/fonts/d-din,
-with Reserved Font Names "D-DIN".
-
-Copyright (C) 2017 Datto Inc. https://www.datto.com/fonts/d-din,
-with Reserved Font Names "D-DIN Condensed".
-
-Copyright (C) 2017 Datto Inc. https://www.datto.com/fonts/d-din,
-with Reserved Font Names "D-DIN Expanded".
-
-This Font Software is licensed under the SIL Open Font License, Version 1.1.
-This license is copied below, and is also available with a FAQ at: 
-http://scripts.sil.org/OFL
+Valid-License-Identifier: OFL-1.1
+License-Text:
 
 -----------------------------------------------------------
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
