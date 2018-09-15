@@ -42,7 +42,7 @@ SPDX-License-Identifier: MIT
             <%= if @tests.all_licenses_present == true do %>
               <li><b>All</b> files uses this set of licenses<br/></li>
             <% else %>
-              <li><b>Not all</b> files uses this set of licenses</li>
+              <li><b>Not all</b> files uses this set of licenses.</li>
             <% end %>
           </ul>
           <% else %>
